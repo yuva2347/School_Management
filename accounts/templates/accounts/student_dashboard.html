@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 30px;
+            width: 400px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: #fff;
+            font-weight: bold;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .info-card p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #00c6ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="top-bar">
+            <a href="{% url 'login' %}" class="login-btn">Logout</a>
+        </div>
+        <h2>Student Dashboard</h2>
+        <div class="info-card">
+            <p><span class="highlight">Student ID:</span> {{ student.student_id }}</p>
+            <p><span class="highlight">Name:</span> {{ student.user.username }}</p>
+            <p><span class="highlight">Grade:</span> {{ student.grade }}</p>
+            <p><span class="highlight">Marks:</span> {{ student.marks }}</p>
+        </div>
+    </div>
+</body>
+</html>
