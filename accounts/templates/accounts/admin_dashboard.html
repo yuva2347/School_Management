@@ -133,13 +133,16 @@
 
         <h3>Teachers</h3>
         <table>
-            <tr><th>ID</th><th>Name</th><th>Subject</th><th>Email</th><th>Actions</th></tr>
+            <tr><th>ID</th><th>Name</th><th>Subject</th><th>Email</th><th>Qualification</th><th>Experience (Years)</th><th>Phone</th><th>Actions</th></tr>
             {% for teacher in teachers %}
             <tr>
                 <td>{{ teacher.teacher_id }}</td>
                 <td>{{ teacher.user.username }}</td>
                 <td>{{ teacher.subject }}</td>
                 <td>{{ teacher.email }}</td>
+                <td>{{ teacher.qualification }}</td>
+                <td>{{ teacher.experience }}</td>
+                <td>{{ teacher.phone_number }}</td>
                 <td>
                     <a href="{% url 'edit_teacher' teacher.id %}">Edit</a>
                     <a href="{% url 'delete_teacher' teacher.id %}">Delete</a>

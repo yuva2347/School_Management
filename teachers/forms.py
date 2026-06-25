@@ -9,7 +9,7 @@ class TeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
-        fields = ['teacher_id', 'subject', 'email']
+        fields = ['teacher_id', 'subject', 'email', 'qualification', 'experience', 'phone_number']
 
     def save(self, commit=True):
         username = self.cleaned_data['username']

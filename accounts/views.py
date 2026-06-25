@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.utils import timezone
 from accounts.models import User, RoleMaster, LoginDetails
 from teachers.models import Teacher
 from students.models import Student
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User as DjangoUser
-
 
 
 def login_view(request):
@@ -47,6 +46,44 @@ def login_view(request):
             return render(request, 'accounts/login.html', {'error': 'User not found'})
 
     return render(request, 'accounts/login.html')
+
+
+def forgot_password_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        new_password = request.POST.get('new_password', '').strip()
+
+        if not email or not new_password:
+            return render(request, 'accounts/forgot_password.html', {'error': 'Email and new password are required.'})
+
+        user = None
+        user = User.objects.filter(email=email).first() or User.objects.filter(username=email).first()
+
+        if not user:
+            teacher = Teacher.objects.filter(email=email).first()
+            if teacher and teacher.user:
+                user = teacher.user
+            else:
+                student = Student.objects.filter(email=email).first()
+                if student and student.user:
+                    user = student.user
+
+        if not user:
+            return render(request, 'accounts/forgot_password.html', {'error': 'No account found with that email.'})
+
+        user.set_password(new_password)
+        user.save()
+
+        try:
+            role_entry = RoleMaster.objects.get(username=user.username)
+            role_entry.password = make_password(new_password)
+            role_entry.save()
+        except RoleMaster.DoesNotExist:
+            pass
+
+        return render(request, 'accounts/forgot_password.html', {'message': 'Password reset successful. You can now log in with your new password.'})
+
+    return render(request, 'accounts/forgot_password.html')
 
 
 @login_required

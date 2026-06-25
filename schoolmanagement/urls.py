@@ -7,6 +7,7 @@ from students import views as student_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', account_views.login_view, name='login'),
+    path('forgot_password/', account_views.forgot_password_view, name='forgot_password'),
 
     # Dashboards
     path('admin_dashboard/', account_views.admin_dashboard, name='admin_dashboard'),

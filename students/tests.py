@@ -8,6 +8,40 @@ from students.models import Student
 from teachers.models import Teacher
 
 
+class ForgotPasswordTests(TestCase):
+    def test_forgot_password_resets_password_for_matching_email(self):
+        user = get_user_model().objects.create_user(username='resetuser', email='reset@example.com', password='oldpass')
+        RoleMaster.objects.create(username='resetuser', password='oldpass', role='student')
+
+        response = self.client.post(reverse('forgot_password'), {
+            'email': 'reset@example.com',
+            'new_password': 'newpass123',
+        })
+
+        user.refresh_from_db()
+        self.assertTrue(user.check_password('newpass123'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_forgot_password_resets_password_for_teacher_profile_email(self):
+        teacher_user = get_user_model().objects.create_user(username='teacherreset', password='oldpass')
+        Teacher.objects.create(
+            user=teacher_user,
+            teacher_id='T999',
+            subject='Science',
+            email='teacherreset@example.com',
+        )
+        RoleMaster.objects.create(username='teacherreset', password='oldpass', role='teacher')
+
+        response = self.client.post(reverse('forgot_password'), {
+            'email': 'teacherreset@example.com',
+            'new_password': 'newpass456',
+        })
+
+        teacher_user.refresh_from_db()
+        self.assertTrue(teacher_user.check_password('newpass456'))
+        self.assertEqual(response.status_code, 200)
+
+
 class TeacherDashboardAssignmentTests(TestCase):
     def setUp(self):
         self.teacher_user = get_user_model().objects.create_user(username='teacher1', password='secret123')
